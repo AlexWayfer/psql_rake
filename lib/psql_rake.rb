@@ -28,15 +28,18 @@ class PSQLRake
 			psql
 		end
 
+		pg_dump_exists = system "bash -c 'type pg_dump'"
+		pg_restore_exists = system "bash -c 'type pg_restore'"
+
 		namespace namespace_name do
-			if system "bash -c 'type pg_dump'"
+			if pg_dump_exists
 				desc 'Make DB dump'
 				task :create, :format do |_task, args|
 					create args
 				end
 			end
 
-			if system "bash -c 'type pg_restore'"
+			if pg_restore_exists
 				desc 'Restore DB dump'
 				task :restore, :step do |_task, args|
 					restore args
@@ -49,9 +52,9 @@ class PSQLRake
 			end
 		end
 
+		alias_task :dump, 'dumps:create' if pg_dump_exists
+		alias_task :restore, 'dumps:restore' if pg_restore_exists
 		alias_task :dumps, 'dumps:list'
-		alias_task :dump, 'dumps:create'
-		alias_task :restore, 'dumps:restore'
 	end
 
 	private
