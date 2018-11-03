@@ -29,14 +29,18 @@ class PSQLRake
 		end
 
 		namespace namespace_name do
-			desc 'Make DB dump'
-			task :create, :format do |_task, args|
-				create args
+			if system "bash -c 'type pg_dump'"
+				desc 'Make DB dump'
+				task :create, :format do |_task, args|
+					create args
+				end
 			end
 
-			desc 'Restore DB dump'
-			task :restore, :step do |_task, args|
-				restore args
+			if system "bash -c 'type pg_restore'"
+				desc 'Restore DB dump'
+				task :restore, :step do |_task, args|
+					restore args
+				end
 			end
 
 			desc 'List DB dumps'
