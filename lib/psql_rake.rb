@@ -28,8 +28,8 @@ class PSQLRake
 			psql
 		end
 
-		pg_dump_exists = system "bash -c 'type pg_dump'"
-		pg_restore_exists = system "bash -c 'type pg_restore'"
+		pg_dump_exists = system "bash -c 'command -v pg_dump >> /dev/null'"
+		pg_restore_exists = system "bash -c 'command -v pg_restore >> /dev/null'"
 
 		namespace namespace_name do
 			if pg_dump_exists
